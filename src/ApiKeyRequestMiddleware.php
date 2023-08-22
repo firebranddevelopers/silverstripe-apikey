@@ -7,6 +7,7 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Control\Middleware\HTTPMiddleware;
+use SilverStripe\Security\Security;
 
 /**
  * Initialises the versioned stage when a request is made.
@@ -30,7 +31,7 @@ class ApiKeyRequestMiddleware implements HTTPMiddleware
                 throw new HTTPResponse_Exception("Bad X-API-Key", 400);
             }
 
-            $matchingKey->Member()->logIn();
+            Security::setCurrentUser($matchingKey->Member());
 
             $matchingKey->markUsed();
         }
